@@ -125,61 +125,59 @@
 <body class="text-center">
   <span class="material-icons" onclick="window.location.href = '/'" style="color: white; font-size: 3rem;">arrow_back_ios</span>
 
-  <!--==================================================================== FORMULARIO ====================================================================-->
+  <!--==================================================================== FORM ====================================================================-->
   <div class='form' style="display:block;">
-    <form class="form-cadastro">
+    <form class="form-registration">
       <img class="mb-4" src="{{ url_for('static', filename='img/NITK_logo.png') }}" alt="" width="250" height="250">
       <h1 class="h3 mb-3 font-weight-normal" style="color: white; font-size: 3rem; ">Register User</h1>
 
-      <label for="username" class="sr-only" style="color: white; font-size: 20px;">Enter user name:</label>
-      <input type="text" id="username" class="form-control" placeholder="User Name" data-toggle="tooltip" data-placement="top">
+      <label for="username" class="sr-only" style="color: white; font-size: 20px;">Enter username:</label>
+      <input type="text" id="username" class="form-control" placeholder="Username" data-toggle="tooltip" data-placement="top">
 
       <label for="password" class="sr-only" style="color: white; font-size: 20px; padding-top: 15px;">Enter password:</label>
       <input type="text" id="password" class="form-control" placeholder="Password" required="">
-      <button id="btn_cadastro" type="button" onclick="cadastro()" data-toggle="collapse" aria-expanded="false"
+      <button id="btn_register" type="button" onclick="register()" data-toggle="collapse" aria-expanded="false"
         class="mb-3 btn btn-lg btn-primary btn-block" style="margin-top: 20px;">Submit</button>
-      <!-- <p class="mt-5 mb-3 text-muted">Johnatan Duarte, 2021</p> -->
   </div>
-  <div class='user_already_exist alert alert-warning' role="alert" style="display:none;">Already registered user,
-    try again!</div>
+  <div class='user_already_exists alert alert-warning' role="alert" style="display:none;">User already registered, try again!</div>
 
-  <!--==================================================================== INPUT DIGITAÇÃO ====================================================================-->
+  <!--==================================================================== TYPING INPUT ====================================================================-->
   <div class='typing-form' style="display:none;">
     <h1 style="color: white;">Register your biometrics by typing the following text:</h1>
     <div id='text_color' style="color: black; font-style: italic;">
-      <h2 style="color: white;">"com grandes poderes vem grandes responsabilidades"</h2>
+      <h2 style="color: white;">"With great power comes great responsibility"</h2>
     </div>
     <textarea onkeydown="keyDown(event);" onkeyup="keyUp();" type="text" class="form-control" id="texto_input"
       placeholder="Type here..." cols="20" rows="3"></textarea>
-    <button id="btn_cadastrar" disabled type="button" onclick="send_biometric()" data-toggle="collapse"
+    <button id="btn_register_biometrics" disabled type="button" onclick="send_biometric()" data-toggle="collapse"
       aria-expanded="false" class="h6 mb-3 btn-signup btn btn-lg btn-primary btn-block" style="color: white; margin-top: 20px;">Register Biometrics</button>
     <h6 class="h6 mb-3 font-weight-normal text-danger" style="color: white; font-size: 25px;">Note</h6>
-    <h6 class="font-weight-normal" style="color: white; font-size: 25px;">Typing errors are not expected, if they occur, the process will be restarted.</h6>
+    <h6 class="font-weight-normal" style="color: white; font-size: 25px;">Typing errors are not expected; if they occur, the process will be restarted.</h6>
   </div>
 
-  <!--==================================================================== Cadastro sucesso ====================================================================-->
-  <div class='cadastro_sucesso' style="display:none;">
-    <h1 style="color: white; padding: 20px;">Registration Successful  </h1>
+  <!--==================================================================== SUCCESS REGISTRATION ====================================================================-->
+  <div class='registration_success' style="display:none;">
+    <h1 style="color: white; padding: 20px;">Registration Successful</h1>
     <button id="login_page" type="button" onclick="window.location.href = '/login'" data-toggle="collapse"
       aria-expanded="false" class="btn-signup btn btn-lg btn-primary btn-block">Authenticate</button>
-    <button id="train_page" type="button" onclick="window.location.href = '/treinar'" data-toggle="collapse"
-      aria-expanded="false" class="btn-signup btn btn-lg btn-primary btn-block">Train my biometrics</button>
+    <button id="train_page" type="button" onclick="window.location.href = '/train'" data-toggle="collapse"
+      aria-expanded="false" class="btn-signup btn btn-lg btn-primary btn-block">Train My Biometrics</button>
   </div>
 
   <!--==================================================================== SCRIPTS ====================================================================-->
   <script type="text/javascript">
-    var usuario_id;
-    var entrada_dados;
-    var digitacao_pattern = [];
-    var texto_input;
-    var texto_padrao = "com grandes poderes vem grandes responsabilidades";
-    const botao_cadastro = document.getElementById("btn_cadastrar");
-    const cadastro_sucesso = document.querySelector(".cadastro_sucesso");
+    var user_id;
+    var input_data;
+    var typing_pattern = [];
+    var input_text;
+    var standard_text = "With great power comes great responsibility";
+    const register_button = document.getElementById("btn_register_biometrics");
+    const registration_success = document.querySelector(".registration_success");
     const form = document.querySelector('.form');
     const typing_form = document.querySelector('.typing-form');
-    const exist = document.querySelector('.user_already_exist');
+    const user_exists = document.querySelector('.user_already_exists');
 
-    function cadastro() {
+    function register() {
       $.ajax({
         type: 'POST',
         url: window.location.href,
@@ -190,15 +188,15 @@
         }),
         dataType: 'json',
         success: function (rdata) {
-          if (rdata['cadastro_cod'] == 'UserRegistrySuccess') {
-            usuario_id = rdata['id_usuario']
-            console.log(usuario_id)
-            form.style.display = 'none'
-            exist.style.display = 'none'
-            typing_form.style.display = 'block'
-          } else if (rdata['cadastro_cod'] == 'UsernameAlreadyExist') {
-            console.log('Username já cadastrado..');
-            exist.style.display = 'block'
+          if (rdata['registration_code'] === 'UserRegistrySuccess') {
+            user_id = rdata['user_id'];
+            console.log(user_id);
+            form.style.display = 'none';
+            user_exists.style.display = 'none';
+            typing_form.style.display = 'block';
+          } else if (rdata['registration_code'] === 'UsernameAlreadyExist') {
+            console.log('Username already registered..');
+            user_exists.style.display = 'block';
           }
         }
       });
@@ -221,7 +219,7 @@
       if (ref == 1) {
         hold_time2 = (time_2 - time_1) / 1000;
         biometric_data.push(hold_time2);
-        verificaTexto();
+        checkText();
       }
       flightTime(time_1);
     }
@@ -231,7 +229,7 @@
       hold_time1 = (time_1 - time_2) / 1000;
       biometric_data.push(hold_time1);
       ref = 1;
-      verificaTexto();
+      checkText();
     }
 
     function flightTime(time) {
@@ -246,36 +244,36 @@
       }
     }
 
-    function verificaTexto() {
-      texto_input = document.getElementById("texto_input").value;
-      if (texto_padrao == texto_input) {
+    function checkText() {
+      input_text = document.getElementById("texto_input").value;
+      if (standard_text === input_text) {
         document.getElementById("text_color").style.color = "#19e030";
-        botao_cadastro.disabled = false;
-        console.log('digitado corretamente');
+        register_button.disabled = false;
+        console.log('typed correctly');
         console.log(biometric_data);
       } else {
         document.getElementById("text_color").style.color = "#de213a";
-        botao_cadastro.disabled = true;
-        console.log('texto não correto')
+        register_button.disabled = true;
+        console.log('incorrect text');
       }
     }
 
     function send_biometric() {
-      typing_form.style.display = 'none'
-      cadastro_sucesso.style.display = 'block'
+      typing_form.style.display = 'none';
+      registration_success.style.display = 'block';
       $.ajax({
         type: 'POST',
-        url: window.location.href + '/biometria',
+        url: window.location.href + '/biometrics',
         contentType: 'application/json; charset=UTF-8',
         data: JSON.stringify({
-          'user_id': usuario_id,
+          'user_id': user_id,
           'data': biometric_data
         }),
         dataType: 'json',
         success: function (rdata) {
-          if (rdata['biometric_cod'] == 'Success') {
-            console.log('sucess')
-          } else if (rdata['biometric_cod'] == 'Fail') {
+          if (rdata['biometric_code'] === 'Success') {
+            console.log('success');
+          } else if (rdata['biometric_code'] === 'Fail') {
             console.log('fail');
           }
         }
