@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="static/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Register</title>
+  <!-- Google Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="static/css/signin.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1561754825-6f9d7b82322d?q=80&w=1774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: inherit;
+      background-size: inherit;
+      background-position: inherit;
+      filter: blur(12px); /* Adjust the blur intensity as needed */
+      z-index: -1;
+    }
+  
+    .form-container {
+      position: relative;
+      max-width: 600px;
+      width: 90%;
+      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      overflow: hidden;
+    }
+  
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
+      border-radius: 10px;
+    }
+  
+    .form-container h1 {
+      color: #007bff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1; /* Ensure text is above the overlay */
+    }
+  
+    .form-container img {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 100%;
+      height: auto;
+    }
+  
+    .form-container label {
+      font-weight: bold;
+    }
+  
+    .form-container .form-control {
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  
+    .form-container .btn-primary {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+  
+    .message-container {
+      max-width: 600px;
+      width: 90%;
+      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+  
+    .message-container h3,
+    .message-container h1 {
+      color: #007bff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+  
+  <!-- jquery -->
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+</head>
+
+<body class="text-center">
+  <span class="material-icons" onclick="window.location.href = '/'" style="color: white; font-size: 3rem;">arrow_back_ios</span>
+
+  <!--==================================================================== FORMULARIO ====================================================================-->
+  <div class='form' style="display:block;">
+    <form class="form-cadastro">
+      <img class="mb-4" src="{{ url_for('static', filename='img/NITK_logo.png') }}" alt="" width="250" height="250">
+      <h1 class="h3 mb-3 font-weight-normal" style="color: white; font-size: 3rem; ">Register User</h1>
+
+      <label for="username" class="sr-only" style="color: white; font-size: 20px;">Enter user name:</label>
+      <input type="text" id="username" class="form-control" placeholder="User Name" data-toggle="tooltip" data-placement="top">
+
+      <label for="password" class="sr-only" style="color: white; font-size: 20px; padding-top: 15px;">Enter password:</label>
+      <input type="text" id="password" class="form-control" placeholder="Password" required="">
+      <button id="btn_cadastro" type="button" onclick="cadastro()" data-toggle="collapse" aria-expanded="false"
+        class="mb-3 btn btn-lg btn-primary btn-block" style="margin-top: 20px;">Submit</button>
+      <!-- <p class="mt-5 mb-3 text-muted">Johnatan Duarte, 2021</p> -->
+  </div>
+  <div class='user_already_exist alert alert-warning' role="alert" style="display:none;">Already registered user,
+    try again!</div>
+
+  <!--==================================================================== INPUT DIGITAÇÃO ====================================================================-->
+  <div class='typing-form' style="display:none;">
+    <h1 style="color: white;">Register your biometrics by typing the following text:</h1>
+    <div id='text_color' style="color: black; font-style: italic;">
+      <h2 style="color: white;">"com grandes poderes vem grandes responsabilidades"</h2>
+    </div>
+    <textarea onkeydown="keyDown(event);" onkeyup="keyUp();" type="text" class="form-control" id="texto_input"
+      placeholder="Type here..." cols="20" rows="3"></textarea>
+    <button id="btn_cadastrar" disabled type="button" onclick="send_biometric()" data-toggle="collapse"
+      aria-expanded="false" class="h6 mb-3 btn-signup btn btn-lg btn-primary btn-block" style="color: white; margin-top: 20px;">Register Biometrics</button>
+    <h6 class="h6 mb-3 font-weight-normal text-danger" style="color: white; font-size: 25px;">Note</h6>
+    <h6 class="font-weight-normal" style="color: white; font-size: 25px;">Typing errors are not expected, if they occur, the process will be restarted.</h6>
+  </div>
+
+  <!--==================================================================== Cadastro sucesso ====================================================================-->
+  <div class='cadastro_sucesso' style="display:none;">
+    <h1 style="color: white; padding: 20px;">Registration Successful  </h1>
+    <button id="login_page" type="button" onclick="window.location.href = '/login'" data-toggle="collapse"
+      aria-expanded="false" class="btn-signup btn btn-lg btn-primary btn-block">Authenticate</button>
+    <button id="train_page" type="button" onclick="window.location.href = '/treinar'" data-toggle="collapse"
+      aria-expanded="false" class="btn-signup btn btn-lg btn-primary btn-block">Train my biometrics</button>
+  </div>
+
+  <!--==================================================================== SCRIPTS ====================================================================-->
+  <script type="text/javascript">
+    var usuario_id;
+    var entrada_dados;
+    var digitacao_pattern = [];
+    var texto_input;
+    var texto_padrao = "com grandes poderes vem grandes responsabilidades";
+    const botao_cadastro = document.getElementById("btn_cadastrar");
+    const cadastro_sucesso = document.querySelector(".cadastro_sucesso");
+    const form = document.querySelector('.form');
+    const typing_form = document.querySelector('.typing-form');
+    const exist = document.querySelector('.user_already_exist');
+
+    function cadastro() {
+      $.ajax({
+        type: 'POST',
+        url: window.location.href,
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify({
+          'username': username.value,
+          'password': password.value
+        }),
+        dataType: 'json',
+        success: function (rdata) {
+          if (rdata['cadastro_cod'] == 'UserRegistrySuccess') {
+            usuario_id = rdata['id_usuario']
+            console.log(usuario_id)
+            form.style.display = 'none'
+            exist.style.display = 'none'
+            typing_form.style.display = 'block'
+          } else if (rdata['cadastro_cod'] == 'UsernameAlreadyExist') {
+            console.log('Username já cadastrado..');
+            exist.style.display = 'block'
+          }
+        }
+      });
+    }
+
+    var ref = 0;
+    var ref2 = 1;
+    var biometric_data = [];
+
+    function keyDown(event) {
+      var key = event.keyCode || event.charCode;
+      if (key == 8) {
+        event.preventDefault();
+        alert("Typing errors are not allowed. Only one chance will be given.");
+        window.location.reload(false);
+        return;
+      }
+
+      time_1 = Date.now();
+      if (ref == 1) {
+        hold_time2 = (time_2 - time_1) / 1000;
+        biometric_data.push(hold_time2);
+        verificaTexto();
+      }
+      flightTime(time_1);
+    }
+
+    function keyUp() {
+      time_2 = Date.now();
+      hold_time1 = (time_1 - time_2) / 1000;
+      biometric_data.push(hold_time1);
+      ref = 1;
+      verificaTexto();
+    }
+
+    function flightTime(time) {
+      if (ref2 == 1) {
+        flight_time_init = time;
+        ref2 = 0;
+      } else {
+        flight_time_final = time;
+        flight_time = (flight_time_init - flight_time_final) / 1000;
+        console.log(flight_time);
+        ref2 = 1;
+      }
+    }
+
+    function verificaTexto() {
+      texto_input = document.getElementById("texto_input").value;
+      if (texto_padrao == texto_input) {
+        document.getElementById("text_color").style.color = "#19e030";
+        botao_cadastro.disabled = false;
+        console.log('digitado corretamente');
+        console.log(biometric_data);
+      } else {
+        document.getElementById("text_color").style.color = "#de213a";
+        botao_cadastro.disabled = true;
+        console.log('texto não correto')
+      }
+    }
+
+    function send_biometric() {
+      typing_form.style.display = 'none'
+      cadastro_sucesso.style.display = 'block'
+      $.ajax({
+        type: 'POST',
+        url: window.location.href + '/biometria',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify({
+          'user_id': usuario_id,
+          'data': biometric_data
+        }),
+        dataType: 'json',
+        success: function (rdata) {
+          if (rdata['biometric_cod'] == 'Success') {
+            console.log('sucess')
+          } else if (rdata['biometric_cod'] == 'Fail') {
+            console.log('fail');
+          }
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
