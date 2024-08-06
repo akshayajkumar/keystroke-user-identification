@@ -65,17 +65,17 @@
     <!--============================= Successful Registration Section =============================-->
     <div class='cadastro_sucesso' style="display:none;">
       <h1 style="color: white;">Training Completed Successfully!</h1>
-      <button style="margin-top: 15px;" id="login_page" type="button" onclick="window.location.href = '/treinar'" class="btn-signup btn btn-lg btn-primary btn-block">TRAIN AGAIN</button>
+      <button style="margin-top: 15px;" id="login_page" type="button" onclick="window.location.href = '/train'" class="btn-signup btn btn-lg btn-primary btn-block">TRAIN AGAIN</button>
     </div>
 
     <!--============================= SCRIPTS =============================-->
     <script type="text/javascript">
-      var entrada_dados;
-      var digitacao_pattern = [];
-      var texto_input;
-      var texto_padrao = "with great power comes great responsibility";
-      const botao_cadastro = document.getElementById("btn_cadastrar");
-      const cadastro_sucesso = document.querySelector(".cadastro_sucesso");
+      var input_data;
+      var typing_pattern = [];
+      var text_input;
+      var standard_text = "with great power comes great responsibility";
+      const register_button = document.getElementById("btn_cadastrar");
+      const success_registration = document.querySelector(".cadastro_sucesso");
       const form = document.querySelector('.form');
       const typing_form = document.querySelector('.typing-form');
       const exist = document.querySelector('.user_already_exist');
@@ -89,7 +89,7 @@
         if(ref == 1) {
           hold_time2 = (time_2 - time_1) / 1000;
           biometric_data.push(hold_time2);
-          verificaTexto();
+          checkText();
         }
         flightTime(time_1);
       }
@@ -99,7 +99,7 @@
         hold_time1 = (time_1 - time_2) / 1000;
         biometric_data.push(hold_time1);
         ref = 1;
-        verificaTexto();
+        checkText();
       }
 
       function flightTime(time) {
@@ -113,28 +113,28 @@
         }
       }
       
-      function verificaTexto() {
+      function checkText() {
         var key = event.keyCode || event.charCode;
         if (key == 8) {
           window.location.reload(false); 
         }
         console.log(biometric_data);
-        texto_input = document.getElementById("texto_input").value;
-        if (texto_padrao == texto_input) {
+        text_input = document.getElementById("texto_input").value;
+        if (standard_text == text_input) {
           document.getElementById("text_color").style.color="#19e030";
-          botao_cadastro.disabled = false;
+          register_button.disabled = false;
           console.log('correctly typed');
           console.log(biometric_data);
         } else {
           document.getElementById("text_color").style.color="#de213a";
-          botao_cadastro.disabled = true;
+          register_button.disabled = true;
           console.log('incorrect text')
         }
       }
       
       function send_biometric() {
         typing_form.style.display = 'none';
-        cadastro_sucesso.style.display = 'block';
+        success_registration.style.display = 'block';
         $.ajax({
           type: 'POST',
           url: window.location.href + '/biometric',
